@@ -2,22 +2,38 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>手書き計算スペース</title>
+  <title>手書き計算スペース（横幅300%）</title>
   <style>
     body { font-family: sans-serif; background: #f7f7f7; text-align: center; }
-    .section { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #ccc; margin: 40px auto; padding: 20px; max-width: 400px; }
-    #drawArea { border: 2px solid #2196f3; border-radius: 8px; background: #fff; touch-action: none; }
-    button { padding: 8px 16px; border-radius: 5px; border: none; background: #2196f3; color: #fff; font-size: 1em; margin: 10px; cursor: pointer; }
+    .section {
+      background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #ccc;
+      margin: 40px auto; padding: 20px; max-width: 1200px;
+      overflow-x: auto;
+    }
+    #drawArea {
+      border: 2px solid #2196f3; border-radius: 8px; background: #fff;
+      touch-action: none;
+      width: 300%;   /* 横幅を親要素の300%に */
+      height: 250px; /* 高さはそのまま */
+      display: block;
+    }
+    button {
+      padding: 8px 16px; border-radius: 5px; border: none;
+      background: #2196f3; color: #fff; font-size: 1em;
+      margin: 10px; cursor: pointer;
+    }
     button:hover { background: #1976d2; }
     .notice { font-size: 0.95em; color: #888; margin-top: 12px; }
   </style>
 </head>
 <body>
-  <h1>📝 手書き計算スペース</h1>
+  <h1>📝 手書き計算スペース（横幅300%）</h1>
   <div class="section">
-    <canvas id="drawArea" width="350" height="250"></canvas><br>
+    <div style="overflow-x:auto;">
+      <canvas id="drawArea" width="1050" height="250"></canvas>
+    </div>
     <button onclick="clearCanvas()">クリア</button>
-    <div class="notice">マウスや指で自由に計算式や図を書けます</div>
+    <div class="notice">マウスや指で自由に計算式や図を書けます（横にスクロールできます）</div>
   </div>
 <script>
   // 手書き描画機能
