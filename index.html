@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>手書き計算スペース</title>
+  <style>
+    body { font-family: sans-serif; background: #f7f7f7; text-align: center; }
+    .section { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #ccc; margin: 40px auto; padding: 20px; max-width: 400px; }
+    #drawArea { border: 2px solid #2196f3; border-radius: 8px; background: #fff; touch-action: none; }
+    button { padding: 8px 16px; border-radius: 5px; border: none; background: #2196f3; color: #fff; font-size: 1em; margin: 10px; cursor: pointer; }
+    button:hover { background: #1976d2; }
+    .notice { font-size: 0.95em; color: #888; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>📝 手書き計算スペース</h1>
+  <div class="section">
+    <canvas id="drawArea" width="350" height="250"></canvas><br>
+    <button onclick="clearCanvas()">クリア</button>
+    <div class="notice">マウスや指で自由に計算式や図を書けます</div>
+  </div>
+<script>
+  // 手書き描画機能
+  const canvas = document.getElementById('drawArea');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  function getPos(e) {
+    if (e.touches) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top
+      };
+    } else {
+      return { x: e.offsetX, y: e.offsetY };
+    }
+  }
+
+  // マウス操作
+  canvas.addEventListener('mousedown', e => { drawing = true; ctx.beginPath(); });
+  canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
+  canvas.addEventListener('mouseout', () => { drawing = false; ctx.beginPath(); });
+  canvas.addEventListener('mousemove', e => {
+    if (!drawing) return;
+    const pos = getPos(e);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#2196f3';
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  });
+
+  // タッチ操作（スマホ・タブレット対応）
+  canvas.addEventListener('touchstart', e => { drawing = true; ctx.beginPath(); });
+  canvas.addEventListener('touchend', () => { drawing = false; ctx.beginPath(); });
+  canvas.addEventListener('touchcancel', () => { drawing = false; ctx.beginPath(); });
+  canvas.addEventListener('touchmove', e => {
+    if (!drawing) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#2196f3';
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  }, { passive: false });
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+</script>
+</body>
+</html>
